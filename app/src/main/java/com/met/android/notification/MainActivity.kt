@@ -134,7 +134,7 @@ class MainActivity : AppCompatActivity() {
         with(NotificationManagerCompat.from(this)) {
             notify(NOTIFICATION_ID, builder.build())
         }
-    }git st
+    }
 
     fun replyButton() {
         /*var replyLabel: String = "reply"
