@@ -10,7 +10,6 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -43,6 +42,20 @@
                     android:layout_height="wrap_content"
                     android:onClick="@{()->context.simpleNotificationWithLongContent()}"
                     android:text="Simple Notification, Long text"
+                    tools:ignore="HardcodedText" />
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{()->context.tapAction()}"
+                    android:text="Tap Action"
+                    tools:ignore="HardcodedText" />
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{()->context.actionButtons()}"
+                    android:text="Action Button"
                     tools:ignore="HardcodedText" />
             </LinearLayout>
         </ScrollView>

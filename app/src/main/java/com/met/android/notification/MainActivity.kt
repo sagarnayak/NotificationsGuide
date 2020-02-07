@@ -2,12 +2,15 @@ package com.met.android.notification
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.app.RemoteInput
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.met.android.notification.databinding.ActivityMainBinding
@@ -18,6 +21,10 @@ class MainActivity : AppCompatActivity() {
         const val CHANNEL_ID_HIGH_IMPORTANCE = "notification_app_channel_high_importance"
 
         const val NOTIFICATION_ID = 1
+
+        const val BROADCAST_TRIGGER = "broadcastTrigger"
+
+        const val KEY_TEXT_REPLY = "key_text_reply"
     }
 
     private lateinit var binding: ActivityMainBinding
@@ -57,10 +64,9 @@ class MainActivity : AppCompatActivity() {
             .setColor(ContextCompat.getColor(this, R.color.colorPrimary))
             .setContentTitle("Title")
             .setContentText("This is the content, this is the longer content which might not be shown to the user with a simple notification.")
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
 
         with(NotificationManagerCompat.from(this)) {
-            // notificationId is a unique int for each notification that you must define
             notify(NOTIFICATION_ID, builder.build())
         }
     }
@@ -76,11 +82,89 @@ class MainActivity : AppCompatActivity() {
                     "This is the content, this is the longer content which might not be shown to the user with a simple notification. but as this is a Bug Style you can see this."
                 )
             )
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
 
         with(NotificationManagerCompat.from(this)) {
-            // notificationId is a unique int for each notification that you must define
             notify(NOTIFICATION_ID, builder.build())
         }
+    }
+
+    fun tapAction() {
+        val intent = Intent(this, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
+
+        val builder = NotificationCompat.Builder(this, CHANNEL_ID_HIGH_IMPORTANCE)
+            .setSmallIcon(R.drawable.bell)
+            .setContentTitle("My notification")
+            .setContentText("Hello World!")
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
+
+        with(NotificationManagerCompat.from(this)) {
+            notify(NOTIFICATION_ID, builder.build())
+        }
+    }
+
+    fun actionButtons() {
+        val intent = Intent(this, ActionButtonBroadcast::class.java).apply {
+            action = BROADCAST_TRIGGER
+        }
+        val pendingIntent: PendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0)
+
+        val builder = NotificationCompat.Builder(this, CHANNEL_ID_HIGH_IMPORTANCE)
+            .setSmallIcon(R.drawable.bell)
+            .setContentTitle("My notification")
+            .setContentText("Hello World!")
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setAutoCancel(true)
+            .addAction(
+                R.drawable.emails,
+                "Toast",
+                pendingIntent
+            )
+            .addAction(
+                R.drawable.emails,
+                "Another",
+                pendingIntent
+            )
+
+        with(NotificationManagerCompat.from(this)) {
+            notify(NOTIFICATION_ID, builder.build())
+        }
+    }git st
+
+    fun replyButton() {
+        /*var replyLabel: String = "reply"
+        var remoteInput: RemoteInput = RemoteInput.Builder(KEY_TEXT_REPLY).run {
+            setLabel(replyLabel)
+            build()
+        }
+
+        var replyPendingIntent: PendingIntent =
+            PendingIntent.getBroadcast(applicationContext,
+             123,
+             ,
+                PendingIntent.FLAG_UPDATE_CURRENT)
+
+        var action: NotificationCompat.Action =
+            NotificationCompat.Action.Builder(R.drawable.ic_reply_icon,
+                getString(R.string.label), replyPendingIntent)
+                .addRemoteInput(remoteInput)
+                .build()
+
+        // Build the notification and add the action.
+        val newMessageNotification = Notification.Builder(context, CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_message)
+            .setContentTitle(getString(R.string.title))
+            .setContentText(getString(R.string.content))
+            .addAction(action)
+            .build()
+
+        with(NotificationManagerCompat.from(this)) {
+            notificationManager.notify(notificationId, newMessageNotification)
+        }*/
     }
 }
