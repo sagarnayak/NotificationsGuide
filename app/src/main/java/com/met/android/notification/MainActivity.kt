@@ -136,6 +136,19 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun getSilentNotificationForMarketMonitoring(): Notification? {
+        val builder = NotificationCompat.Builder(context, CHANNEL_ID_HIGH_IMPORTANCE)
+            .setSmallIcon(R.mipmap.ic_launcher)
+            .setContentTitle("Remittance")
+            .setContentText("Remittance")
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setOngoing(true)
+            .setAutoCancel(false)
+            .setNotificationSilent()
+
+        return builder.build()
+    }
+
     fun replyButton() {
         /*var replyLabel: String = "reply"
         var remoteInput: RemoteInput = RemoteInput.Builder(KEY_TEXT_REPLY).run {
